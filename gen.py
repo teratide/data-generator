@@ -41,6 +41,10 @@ for i, records in record_sizes:
     else:
         records_str = str(records)
 
+    # Create output directory if it does not yet exist
+    if not os.path.exists(outdir):
+        os.makedirs(outdir)
+
     # Generate data and write to csv file
     file = outdir + '/data-' + str(records_str) + '.csv'
     print('Generating ' + file)
