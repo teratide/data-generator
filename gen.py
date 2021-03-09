@@ -12,13 +12,13 @@ import os
 # PARAMETERS  |
 # ------------|
 #
-record_sizes = [10e6, 50e6, 100e6, 150e6]
+record_sizes = [1e3, 64e3, 1024e3]
 match_percentage = 0.05
 data_length = 100
-regex = '.*[tT][eE][rR][aA][tT][iI][dD][eE][ \t\n]+[dD][oO][lL][pP][hH][iI][nN][ \t\n]+([mM][eE])+[pP][oO][wW][eE][rR].*'
+regex = '.*[tT][eE][rR][aA][tT][iI][dD][eE][ \t\n]+[dD][iI][vV][iI][nN][gG][ \t\n]+([sS][uU][bB])+[sS][uU][rR][fF][aA][cC][eE].*'
 parquet_chunksize = 1e6
 parquet_compression = 'none'
-outdir = '.'
+outdir = './diving'
 
 # Print parameters at the start of each run
 print('\nDATASET GENERATOR')
@@ -31,7 +31,7 @@ print('Parquet compression:\t' + parquet_compression + '\n')
 
 # Main loop for each of the requested record sizes
 print('Generating ' + str(len(record_sizes)) + ' datasets...\n')
-for records in record_sizes:
+for i, records in enumerate(record_sizes):
 
     # Convert records to int and format to readable string
     records = int(records)
