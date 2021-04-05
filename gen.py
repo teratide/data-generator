@@ -31,12 +31,19 @@ def regex_strings(record_sizes, match_percentage, data_length, regex, parquet_ch
         else:
             records_str = str(records)
 
+        # Convert chunk size to int and format to readable string
+        parquet_chunksize = int(parquet_chunksize)
+        if (parquet_chunksize >= 1e6):
+            batch_str = str(int(parquet_chunksize / 1e6)) + 'M'
+        else:
+            batch_str = str(parquet_chunksize)
+
         # Create output directory if it does not yet exist
         if not os.path.exists(outdir):
             os.makedirs(outdir)
 
         # Generate data and write to csv file
-        file = outdir + '/data-' + str(records_str) + '.csv'
+        file = outdir + '/data-' + str(records_str) + '-' + batch_str + '.csv'
         print('Generating ' + file)
         with open(file, mode='w') as f:
             writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -62,7 +69,7 @@ def regex_strings(record_sizes, match_percentage, data_length, regex, parquet_ch
                 writer.writerow([val, repr(data)])
 
         # Convert the csv to a parquet file
-        parquet_file = outdir + '/data-' + str(records_str) + '.parquet'
+        parquet_file = outdir + '/data-' + str(records_str) + '-' + str(batch_str) + '.parquet'
         csv_stream = pd.read_csv(file, chunksize=parquet_chunksize, low_memory=False)
         print('Converting to ' + parquet_file)
         for j, chunk in progressbar.progressbar(enumerate(csv_stream)):
